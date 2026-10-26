@@ -6,6 +6,7 @@ import Assistant from './pages/Assistant.jsx';
 import AuthPage from './pages/AuthPage.jsx';
 import ResumeJobs from './pages/ResumeJobs.jsx';
 import SkillGap from './pages/SkillGap.jsx';
+import VerifyPage from './pages/VerifyPage.jsx';
 
 function Protected({ children }) {
   const { user, loading } = useAuth();
@@ -17,6 +18,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<AuthPage />} />
+      <Route path="/verify" element={<VerifyPage />} />
       <Route element={<Protected><Layout /></Protected>}>
         <Route index element={<ResumeJobs />} />
         <Route path="skill-gap" element={<SkillGap />} />

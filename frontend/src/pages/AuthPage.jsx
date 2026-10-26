@@ -9,6 +9,7 @@ export default function AuthPage() {
   const [mode, setMode] = useState('login');
   const [form, setForm] = useState({ name: '', email: '', password: '' });
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [busy, setBusy] = useState(false);
 
   if (user) return <Navigate to="/" replace />;
@@ -18,10 +19,16 @@ export default function AuthPage() {
   const submit = async (e) => {
     e.preventDefault();
     setError('');
+    setSuccess('');
     setBusy(true);
     try {
-      if (isRegister) await register(form.name, form.email, form.password);
-      else await login(form.email, form.password);
+      if (isRegister) {
+        const data = await register(form.name, form.email, form.password);
+        setSuccess(data?.message || 'Verification email sent! Please check your inbox to activate your account.');
+        setForm({ name: '', email: '', password: '' }); // Clear form
+      } else {
+        await login(form.email, form.password);
+      }
     } catch (err) {
       setError(err.message);
     } finally {
@@ -80,7 +87,11 @@ export default function AuthPage() {
               <input id="password" type="password" className="input" autoComplete={isRegister ? 'new-password' : 'current-password'}
                 value={form.password} onChange={set('password')} placeholder={isRegister ? 'At least 8 characters' : ''} required />
             </div>
+            
+            {/* Error and Success Feedback Banners */}
             <div aria-live="polite" className="min-h-[1.25rem] text-sm font-medium text-rose-600">{error}</div>
+            <div aria-live="polite" className="min-h-[1.25rem] text-sm font-medium text-teal-600">{success}</div>
+
             <button type="submit" disabled={busy} className="btn btn-primary w-full">
               {busy ? <Spinner /> : null}{isRegister ? 'Create account' : 'Sign in'}{!busy && <ArrowRight className="h-4 w-4" />}
             </button>
@@ -88,7 +99,7 @@ export default function AuthPage() {
 
           <p className="mt-6 text-center text-sm text-ink-mute">
             {isRegister ? 'Already have an account?' : 'New here?'}{' '}
-            <button type="button" className="font-bold text-teal-700 hover:underline" onClick={() => { setMode(isRegister ? 'login' : 'register'); setError(''); }}>
+            <button type="button" className="font-bold text-teal-700 hover:underline" onClick={() => { setMode(isRegister ? 'login' : 'register'); setError(''); setSuccess(''); }}>
               {isRegister ? 'Sign in' : 'Create an account'}
             </button>
           </p>
