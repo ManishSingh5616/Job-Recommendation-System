@@ -10,7 +10,7 @@ login, dashboard, chat UI               JWT auth, uploads, PostgreSQL         Ge
 shared/skills_vocab.json  -> one skill vocabulary used by both back ends
 ```
 
-## Run it (3 terminals)
+## Run it ... (3 terminals)
 
 **0. PostgreSQL** - create an empty database: `CREATE DATABASE career_intelligence;` (tables are created automatically).
 
